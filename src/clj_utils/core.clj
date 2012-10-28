@@ -5,3 +5,7 @@
 ;; https://gist.github.com/3378201
 (defmacro hash-map-by-names [names]
   (zipmap (map keyword names) names))
+
+(defn split-with-ratio [ratio coll]
+  (let [n (count coll)]
+    (split-at (* n ratio) coll)))
