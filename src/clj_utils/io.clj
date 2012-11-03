@@ -3,13 +3,25 @@
 
 (import '(java.io File FileReader))
 
-(defn serialize [o filename]
-  (with-open [outp (-> (File. filename) java.io.FileOutputStream. java.io.ObjectOutputStream.)]
+(defmulti serialize (fn [o file-lile] (type file-lile)))
+
+(defmethod serialize File [o file]
+  (with-open [outp (-> file java.io.FileOutputStream.
+                       java.io.ObjectOutputStream.)]
     (.writeObject outp o)))
 
-(defn deserialize [filename]
-  (with-open [inp (-> (File. filename) java.io.FileInputStream. java.io.ObjectInputStream.)]
+(defmethod serialize String [o filename]
+  (serialize o (File. filename)))
+
+(defmulti deserialize (fn [file-lile] (type file-lile)))
+
+(defmethod deserialize File [file]
+  (with-open [inp (-> file java.io.FileInputStream.
+                      java.io.ObjectInputStream.)]
     (.readObject inp)))
+
+(defmethod deserialize String [filename]
+  (deserialize (File. filename)))
 
 (defmacro with-temp-file
   [[varname & [content]] & body]
