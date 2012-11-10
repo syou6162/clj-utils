@@ -16,3 +16,10 @@
 (deftest split-with-ratio-test
   (is (= (split-with-ratio 0.9 (range 10))
          ['(0 1 2 3 4 5 6 7 8) '(9)])))
+
+(deftest memoize-fn-test
+  (is (= 55
+         ((memoize-fn fib [n]
+                      (if (<= n 1)
+                        n
+                        (+ (fib (dec n)) (fib (- n 2))))) 10))))
