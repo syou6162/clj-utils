@@ -13,8 +13,11 @@
         tp (get freq [1 1] 0)
         tn (get freq [-1 -1] 0)
         fp (get freq [-1 1] 0)
-        fn (get freq [1 -1] 0)
-        recall (/ tp (+ tp fn))
-        precision (/ tp (+ tp fp))]
-    (/ (* 2.0 recall precision)
-       (+ recall precision))))
+        fn (get freq [1 -1] 0)]
+    (if (or (zero? (+ tp fn))
+            (zero? (+ tp fp)))
+      Double/NaN
+      (let [recall (/ tp (+ tp fn))
+            precision (/ tp (+ tp fp))]
+        (/ (* 2.0 recall precision)
+           (+ recall precision))))))
