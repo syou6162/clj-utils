@@ -8,6 +8,8 @@
         save-obj-to-id (symbol (str "save-" obj-name "-to-id"))
         load-obj-to-id (symbol (str "load-" obj-name "-to-id"))
         clear-obj-mapping! (symbol (str "clear-" obj-name "-mapping!"))
+        obj-to-id-mapping (symbol (str obj-name "-to-id-mapping"))
+        id-to-obj-mapping (symbol (str "id-to-" obj-name "-mapping"))
         max-obj-id (symbol (str "max-" obj-name "-id"))]
     `(let [obj-to-id-mapping# (atom {})
            id-to-obj-mapping# (atom [])]
@@ -33,5 +35,7 @@
          (defn ~clear-obj-mapping! []
            (do (reset! obj-to-id-mapping# {})
                (reset! id-to-obj-mapping# [])))
+         (defn ~obj-to-id-mapping [] @obj-to-id-mapping#)
+         (defn ~id-to-obj-mapping [] @id-to-obj-mapping#)
          (defn ~max-obj-id []
            (count @obj-to-id-mapping#))))))
