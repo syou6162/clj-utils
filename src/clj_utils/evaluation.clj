@@ -5,7 +5,9 @@
   (let [sum (count (get (group-by (fn [[n1 n2]] (= n1 n2))
                                   (map vector gold prediction))
                         true))]
-    (* 1.0 (/ sum (count gold)))))
+    (if (zero? (count gold))
+      Double/NaN
+      (* 1.0 (/ sum (count gold))))))
 
 (defn get-f-value [gold prediction]
   (assert (= (count gold) (count prediction)))
