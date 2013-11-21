@@ -11,7 +11,7 @@
     (str *logging-dir* "/" s ".log")))
 
 (defn init-logger []
-  (let [dir (java.io.File. *logging-dir*)]
+  (let [dir (java.io.File. ^String *logging-dir*)]
     (when-not (.exists dir)
       (.mkdir dir)))
   (timbre/set-config!

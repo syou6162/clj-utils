@@ -5,7 +5,7 @@
     (new java.util.Random seed)))
 
 (defn shuffle-with-random
-  ([random coll]
+  ([random ^java.util.Collection coll]
      (let [arrayList (java.util.ArrayList. coll)]
        (java.util.Collections/shuffle arrayList random)
        (clojure.lang.RT/vector (.toArray arrayList))))
