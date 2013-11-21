@@ -3,7 +3,9 @@
 
 (defmacro def-obj-and-id-mapping [obj-name]
   "Define the functions related to converting object <=> id."
-  (let [obj-to-id (symbol (str obj-name "-to-id"))
+  (let [*update-obj-id?* (-> (symbol (str "*update-" obj-name "-id?*"))
+                             (vary-meta assoc :dynamic true))
+        obj-to-id (symbol (str obj-name "-to-id"))
         id-to-obj (symbol (str "id-to-" obj-name))
         save-obj-to-id (symbol (str "save-" obj-name "-to-id"))
         load-obj-to-id (symbol (str "load-" obj-name "-to-id"))
@@ -14,14 +16,17 @@
     `(let [obj-to-id-mapping# (atom {})
            id-to-obj-mapping# (atom [])]
        (do
+         (def ~*update-obj-id?* true)
          (defn ~obj-to-id [obj#]
-           (let [v# (get @obj-to-id-mapping# obj#)
-                 max-id# (count @obj-to-id-mapping#)]
-             (if v#
-               v#
-               (do (swap! obj-to-id-mapping# assoc obj# max-id#)
-                   (swap! id-to-obj-mapping# conj obj#)
-                   max-id#))))
+           (if ~*update-obj-id?*
+             (let [v# (get @obj-to-id-mapping# obj#)
+                   max-id# (count @obj-to-id-mapping#)]
+               (if v#
+                 v#
+                 (do (swap! obj-to-id-mapping# assoc obj# max-id#)
+                     (swap! id-to-obj-mapping# conj obj#)
+                     max-id#)))
+             (get @obj-to-id-mapping# obj#)))
          (defn ~id-to-obj [id#]
            (nth @id-to-obj-mapping# id#))
          (defn ~save-obj-to-id [filename#]

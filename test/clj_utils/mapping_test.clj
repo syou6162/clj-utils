@@ -9,4 +9,6 @@
        0 (word-to-id "a")
        1 (word-to-id "b")
        2 (word-to-id "c")
-       0 (word-to-id "a")))
+       0 (word-to-id "a"))
+  (is (nil? (binding [*update-word-id?* false]
+              (word-to-id "NOT FOUND")))))
