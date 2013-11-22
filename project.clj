@@ -1,4 +1,4 @@
-(defproject info.yasuhisay/clj-utils "0.1.2"
+(defproject info.yasuhisay/clj-utils "0.1.3"
   :description "My utils for clojure"
   :url "https://github.com/syou6162/clj-utils"
   :license {:name "Eclipse Public License"
